@@ -6,6 +6,8 @@ import express from "express";
 import fs from "fs"
 import EnvConfig from "./businessLayer/utils/EnvConfig";
 import { LOGGER } from "./businessLayer/utils/Logger";
+import { apiRouter } from "./apiLayer/router/ApiRoutes";
+import { errorInterceptor, notFound } from "./apiLayer/middleware/ErrorMiddleware";
 
 const expressApp: express.Application = express();
 
@@ -13,8 +15,10 @@ expressApp.use(cors({ origin: "*" }));
 expressApp.use(express.urlencoded({ extended: true }));
 expressApp.use(express.json());
 expressApp.use(LOGGER.winstonLogger);
+expressApp.use('*', errorInterceptor);
+expressApp.use('/api', apiRouter);
+expressApp.use(notFound);
 
-expressApp.get('/test', (req,res)=> {res.send({message:"test"})});
 let server: http.Server | https.Server;
 
 // Add certficates if we want to create a secure server
