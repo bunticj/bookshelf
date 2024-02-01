@@ -1,0 +1,20 @@
+version: '3'
+services:
+  database:
+    container_name: database
+    image: mariadb:latest
+    ports:
+      - "${DB_PORT}:${DB_PORT}"
+    volumes:
+      - ./data:/var/lib/mysql
+      - ./init:/docker-entrypoint-initdb.d
+    restart: on-failure
+    environment:
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_PASSWORD: ${DB_USER_PW}
+      MYSQL_USER: ${DB_USER}
+networks:
+  default:
+volumes:
+  data:
+    driver: local
