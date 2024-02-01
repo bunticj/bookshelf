@@ -12,7 +12,8 @@ USE `bookshelf`;
 
 CREATE TABLE IF NOT EXISTS `user_account` (
     id INT NOT NULL AUTO_INCREMENT,
-    email VARCHAR(64) NOT NULL,
+    email VARCHAR(128) NOT NULL,
+    password VARCHAR(64) NOT NULL,
     role_type INT NOT NULL,
     status_type INT NOT NULL,
     PRIMARY KEY (id),

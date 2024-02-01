@@ -4,7 +4,7 @@ import { UserAccount } from "../model/UserAccount";
 import { RoleType } from "../enum/RoleType";
 import { StatusType } from "../enum/StatusType";
 
-class UserService {
+class UserAccountService {
     private repository: UserAccountRepository;
     constructor() {
         this.repository = new UserAccountRepository();
@@ -31,4 +31,4 @@ class UserService {
     }
 }
 
-export const userService = new UserService();
+export const userAccountService = new UserAccountService();
