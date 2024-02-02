@@ -7,12 +7,12 @@ export class ErrorHandler {
     public static catchError(error: Error, additionalData: IDictionary<any> = {}): IErrorResponse {
         let customError = error as CustomError;
         // TODO uncomment before final push
-        //if (additionalData.password) additionalData.password = "*";
+        if (additionalData.password) additionalData.password = "*";
         if (!customError.errorType) {
-            customError = new CustomError(ErrorType.GenericError, error.message, { stack: error.stack, name: error.name });
+            customError = new CustomError(ErrorType.UnknownError, error.message, { stack: error.stack, name: error.name });
             LOGGER.critical(`unthrownError: ${JSON.stringify(customError)} \n additionalData = ${JSON.stringify(additionalData)}`);
         }
-        else LOGGER.debug(`thrownError: ${JSON.stringify(customError)} \n additionalData = ${JSON.stringify(additionalData)}`);
+        else LOGGER.verbose(`thrownError: ${JSON.stringify(customError)} \n additionalData = ${JSON.stringify(additionalData)}`);
         const errorResponse: IErrorResponse = { errorType: customError.errorType, message: error.message };
         return errorResponse;
     }

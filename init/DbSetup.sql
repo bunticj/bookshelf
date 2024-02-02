@@ -10,30 +10,24 @@ CREATE DATABASE IF NOT EXISTS `bookshelf` DEFAULT CHARACTER SET utf8mb4;
 
 USE `bookshelf`;
 
-CREATE TABLE IF NOT EXISTS `user_account` (
+CREATE TABLE IF NOT EXISTS `user` (
     id INT NOT NULL AUTO_INCREMENT,
     email VARCHAR(128) NOT NULL,
     password VARCHAR(64) NOT NULL,
-    role_type INT NOT NULL,
-    status_type INT NOT NULL,
+    first_name VARCHAR(32) NOT NULL,
+    last_name VARCHAR(32) NOT NULL,
+    role_type ENUM('admin', 'author') NOT NULL,
+    status_type ENUM('active', 'inactive') NOT NULL,
     PRIMARY KEY (id),
     UNIQUE KEY (email)
 ) ENGINE = InnoDB;
 
-CREATE TABLE IF NOT EXISTS `author` (
-    id INT NOT NULL AUTO_INCREMENT,
-    account_id INT NULL,
-    first_name VARCHAR(32) NOT NULL,
-    last_name VARCHAR(32) NOT NULL,
-    PRIMARY KEY (id),
-    FOREIGN KEY (account_id) REFERENCES `user_account`(id),
-) ENGINE = InnoDB;
-
 CREATE TABLE IF NOT EXISTS `book` (
     id INT NOT NULL AUTO_INCREMENT,
-    title VARCHAR(64) NOT NULL,
-    publisher VARCHAR(64) NOT NULL,
+    title VARCHAR(32) NOT NULL,
+    publisher VARCHAR(32) NOT NULL,
     author_id INT NOT NULL,
+    status_type ENUM('active', 'inactive') NOT NULL,
     PRIMARY KEY (id),
-    FOREIGN KEY (author_id) REFERENCES `author`(id)
+    FOREIGN KEY (author_id) REFERENCES `user`(id)
 ) ENGINE = InnoDB;

@@ -1,9 +1,18 @@
 import express from 'express';
-import { userAccountController } from '../controller/UserAccountController';
+import { userController } from '../controller/UserController';
+import { bookController } from '../controller/BookController';
 
 export const apiRouter = express.Router();
 
-// User account routes
-apiRouter.post('/register', userAccountController.register);
-apiRouter.post('/login', userAccountController.login);
-apiRouter.get('/user/:userId', userAccountController.getById);
+// User routes
+apiRouter.post('/register', userController.register);
+apiRouter.post('/login', userController.login);
+apiRouter.get('/user/:userId', userController.getById);
+apiRouter.get('/user/:userId/deactivate', userController.deactivate);
+
+
+// Book routes
+apiRouter.post('/book', bookController.createBook);
+apiRouter.get('/book/:bookId', bookController.getByBookId);
+apiRouter.patch('/book/:bookId', bookController.updateBook);
+apiRouter.delete('/book/:bookId', bookController.deleteBook);

@@ -1,6 +1,6 @@
 import { ErrorType } from "../enum/ErrorType";
 
-export interface IDictionary<T> {
+export interface IDictionary<T=any> {
     [index: string | number]: T;
 }
 

@@ -9,16 +9,15 @@ export const errorInterceptor = (error: any, req: express.Request, res: express.
     try {
         if (error instanceof Error) {
             (error as CustomError)["errorType"] = ErrorType.BadRequest;
-            const errorResponse = ErrorHandler.catchError(error, { url: req.originalUrl, method: req.method, body: req.body });
+            const errorResponse = ErrorHandler.catchError(error, { url: req.originalUrl, method: req.method, ...req.body });
             res.status(400).send(errorResponse);
         }
         else next();
     } catch (err) {
-        const errorResponse = ErrorHandler.catchError(err as Error, { url: req.originalUrl, method: req.method, body: req.body });
+        const errorResponse = ErrorHandler.catchError(err as Error, { url: req.originalUrl, method: req.method, ...req.body });
         res.status(400).send(errorResponse);
     }
 }
-
 
 export const notFound = (res: express.Response): void => {
     const errorResponse: IErrorResponse = { errorType: ErrorType.NotFound, message: "Resource not found" };
