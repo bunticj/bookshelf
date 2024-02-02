@@ -9,18 +9,18 @@ export class BookRepository {
 
     public async create(title: string, publisher: string, authorId: number, statusType?: StatusType): Promise<Book> {
         let book = new Book(authorId, title, publisher, statusType);
-        book = await this.query.createEntity<Book>(book);
+        book = await this.query.createEntity(book);
         return book;
     }
 
     public async getByBookId(id: number): Promise<Book | undefined> {
-        const book = await this.query.getEntity<Book>("id", id);
+        const book = await this.query.getEntity("id", id);
         if (!book) return;
         return book;
     }
 
     public async getByAuthorId(authorId: number): Promise<Book | undefined> {
-        const book = await this.query.getEntity<Book>("author_id", authorId);
+        const book = await this.query.getEntity("author_id", authorId);
         if (!book) return;
         return book;
     }

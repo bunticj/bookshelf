@@ -2,7 +2,7 @@ import { BookRepository } from "../../dataAccessLayer/repository/BookRepository"
 import { Book } from "../model/Book";
 import { StatusType } from "../enum/StatusType";
 
-class BookService {
+export class BookService {
     private repository: BookRepository;
     constructor(bookRepository: BookRepository) {
         this.repository = bookRepository;
@@ -31,5 +31,3 @@ class BookService {
         await this.repository.deleteBook(bookId, authorId)
     }
 }
-
-export const bookService = new BookService(new BookRepository());

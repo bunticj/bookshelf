@@ -5,8 +5,7 @@ import { ErrorHandler } from '../../businessLayer/utils/ErrorHandler';
 import { validateStringLengths, validateStrings } from '../validator/Validator';
 import { IDictionary } from '../../businessLayer/interface/HelperInterface';
 import { Book } from '../../businessLayer/model/Book';
-import { bookService } from '../../businessLayer/services/BookService';
-
+import { serviceManager } from '../../businessLayer/services/ServiceManager';
 class BookController {
 
     private static validateBookBody(body: IDictionary) {
@@ -21,7 +20,7 @@ class BookController {
             let id = 1;
             BookController.validateBookBody(req.body);
             const { title, publisher } = req.body as Book;
-            const book = await bookService.createBook(title, publisher, id);
+            const book = await serviceManager.bookService.createBook(title, publisher, id);
             res.status(200).send(book);
         }
         catch (err) {
@@ -34,7 +33,7 @@ class BookController {
         try {
             const bookId = +req.params.bookId;
             if (typeof bookId !== "number") throw new CustomError(ErrorType.BadRequest, "Invalid book id");
-            const book = await bookService.getBookById(bookId);
+            const book = await serviceManager.bookService.getBookById(bookId);
             if (!book) throw new CustomError(ErrorType.NotFound, "Book not found", { bookId });
             res.status(200).send(book);
         }
@@ -50,7 +49,7 @@ class BookController {
             const bookId = +req.params.bookId;
             const book = req.body as Partial<Book>
             if (typeof bookId !== "number") throw new CustomError(ErrorType.BadRequest, "Invalid book id");
-            await bookService.updateBook(book);
+            await serviceManager.bookService.updateBook(book);
             res.status(200).send({ message: "OK" });
         }
         catch (err) {
@@ -64,7 +63,7 @@ class BookController {
             const userId = 1; // extract from token
             const bookId = +req.params.bookId;
             if (typeof bookId !== "number") throw new CustomError(ErrorType.BadRequest, "Invalid book id");
-            await bookService.deleteBook(bookId, userId);
+            await serviceManager.bookService.deleteBook(bookId, userId);
             res.status(200).send({ message: "OK" });
         }
         catch (err) {

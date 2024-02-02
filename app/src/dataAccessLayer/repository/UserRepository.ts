@@ -15,13 +15,13 @@ export class UserRepository {
     }
 
     public async getByUserId(id: number): Promise<User | undefined> {
-        const user = await this.query.getEntity<User>("id", id);
+        const user = await this.query.getEntity("id", id);
         if (!user) return;
         return user;
     }
 
     public async getByEmail(email: string): Promise<User | undefined> {
-        const user = await this.query.getEntity<User>("email", email);
+        const user = await this.query.getEntity("email", email);
         if (!user) return;
         return user;
     }

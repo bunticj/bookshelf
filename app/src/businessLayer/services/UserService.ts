@@ -2,8 +2,7 @@ import { UserRepository } from "../../dataAccessLayer/repository/UserRepository"
 import { RoleType } from "../enum/RoleType";
 import { StatusType } from "../enum/StatusType";
 import { User } from "../model/User";
-
-class UserService {
+export class UserService {
     private repository: UserRepository;
     constructor(userRepository: UserRepository) {
         this.repository = userRepository;
@@ -28,5 +27,3 @@ class UserService {
         await this.repository.updateUser(user)
     }
 }
-
-export const userService = new UserService(new UserRepository());
