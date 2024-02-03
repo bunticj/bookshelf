@@ -2,18 +2,18 @@ import { RoleType } from "../enum/RoleType";
 import { StatusType } from "../enum/StatusType";
 export class User {
     public id?: number;
-    public password: string;
-    public first_name: string;
-    public last_name: string;
+    public password?: string;
+    public firstName: string;
+    public lastName: string;
     public email: string
-    public role_type: RoleType;
-    public status_type: StatusType;
-    constructor(email: string, first_name: string, last_name: string, password: string, roleType?: RoleType, statusType?: StatusType) {
+    public role: RoleType;
+    public status: StatusType;
+    constructor(email: string, firstName: string, lastName: string, password: string, role?: RoleType, status?: StatusType) {
         this.password = password;
         this.email = email;
-        this.first_name = first_name;
-        this.last_name = last_name;
-        this.role_type = roleType || RoleType.Author;
-        this.status_type = statusType || StatusType.Active;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.role = role || RoleType.Author;
+        this.status = status || StatusType.Active;
     }
 }

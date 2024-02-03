@@ -6,7 +6,6 @@ import { LOGGER } from "./Logger";
 export class ErrorHandler {
     public static catchError(error: Error, additionalData: IDictionary<any> = {}): IErrorResponse {
         let customError = error as CustomError;
-        // TODO uncomment before final push
         if (additionalData.password) additionalData.password = "*";
         if (!customError.errorType) {
             customError = new CustomError(ErrorType.UnknownError, error.message, { stack: error.stack, name: error.name });

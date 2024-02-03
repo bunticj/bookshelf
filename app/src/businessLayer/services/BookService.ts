@@ -18,8 +18,8 @@ export class BookService {
         return book;
     }
 
-    public async createBook(title: string, publisher: string, authorId: number, statusType?: StatusType): Promise<Book> {
-        const book = await this.repository.create(title, publisher, authorId, statusType);
+    public async createBook(title: string, publisher: string, authorId: number, status?: StatusType): Promise<Book> {
+        const book = await this.repository.create(title, publisher, authorId, status);
         return book;
     }
 

@@ -11,19 +11,19 @@ export class UserQuery extends AbstractQuery<User> {
     }
 
     public async createEntity(data: User): Promise<User> {
-        const { email, first_name, last_name, password, role_type, status_type } = data as User;
-        let query = `INSERT into ${this.table} (email,first_name,last_name, password, role_type, status_type) VALUES (?, ?, ?, ?, ?, ?);`;
-        const result = await DB.runQuery(query, [email, first_name, last_name, password, role_type, status_type]);
+        const { email, firstName, lastName, password, role, status } = data;
+        let query = `INSERT into ${this.table} (email,firstName,lastName, password, role, status) VALUES (?, ?, ?, ?, ?, ?);`;
+        const result = await DB.runQuery(query, [email, firstName, lastName, password, role, status]);
         const id = parseInt(result.insertId);
-        (data as any)["id"] = id;
+        data.id = id;
         return data;
     }
 
     public async updateEntity(data: Partial<User>): Promise<void> {
-        const { email, first_name, last_name, password, role_type, status_type, id } = data;
-        let query = `UPDATE ${this.table} SET email = IFNULL(?, email), first_name = IFNULL(?, first_name),last_name = IFNULL(?, last_name),
-        status_type = IFNULL(?, status_type, role_type = IFNULL(?, role_type) WHERE id = ?`;
-        return await DB.runQuery(query, [email, first_name, last_name, password, role_type, status_type, id]);
+        const { email, firstName, lastName, password, role, status, id } = data;
+        let query = `UPDATE ${this.table} SET email = IFNULL(?, email), firstName = IFNULL(?, firstName),lastName = IFNULL(?, lastName),
+        status = IFNULL(?, status, role = IFNULL(?, role) WHERE id = ?`;
+        return await DB.runQuery(query, [email, firstName, lastName, password, role, status, id]);
     }
 
     public async deleteEntity(data: Partial<User>): Promise<void> {
