@@ -6,29 +6,31 @@ import { ErrorType } from "../../businessLayer/enum/ErrorType";
 import { RoleType } from '../../businessLayer/enum/RoleType';
 import { ErrorHandler } from '../../businessLayer/utils/ErrorHandler';
 import { validateStringLengths, validateStrings } from '../validator/Validator';
-import { IDictionary } from '../../businessLayer/interface/HelperInterface';
 import { User } from '../../businessLayer/model/User';
 import { StatusType } from '../../businessLayer/enum/StatusType';
 import { serviceManager } from '../../businessLayer/services/ServiceManager';
+import { IDictionary } from '../../businessLayer/interface/HelperInterface';
 
 class UserController {
     private static validateRegisterBody(body: IDictionary) {
-        const stringsToValidate = ["first_name", "last_name", "password", "email"];
+        const stringsToValidate = ["firstName", "lastName", "password", "email"];
         validateStrings(stringsToValidate, body);
         validateStringLengths(stringsToValidate, [32, 32, 64, 128])
     }
 
     public async register(req: express.Request, res: express.Response) {
         try {
-
-            const roleType = req.body.roleType === RoleType.Admin && req.path.includes("admin") ? RoleType.Admin : RoleType.Author;
             UserController.validateRegisterBody(req.body);
-            const { email, password, first_name, last_name, status_type } = req.body as User;
-            const user = await serviceManager.userService.getByEmail(email);
-            if (user) throw new CustomError(ErrorType.UserAlreadyExists, "Email already exists", { email });
-            const hashedPass = await bcrypt.hash(password, Constants.bcryptSaltRounds);
-            const createdUser = await serviceManager.userService.createUser(email, hashedPass, first_name, last_name, roleType, status_type);
-            res.status(200).send(createdUser);
+            const { email, password, firstName, lastName } = req.body as User;
+            const role = RoleType.Author;
+            const status = StatusType.Active;
+            const existingUser = await serviceManager.userService.getByEmail(email);
+            if (existingUser) throw new CustomError(ErrorType.UserAlreadyExists, "Email already exists", { email });
+            const hashedPass = await bcrypt.hash(password!, Constants.bcryptSaltRounds);
+            const user = await serviceManager.userService.createUser(email, hashedPass, firstName, lastName, role, status);
+            const tokens = serviceManager.authenticationService.signAuthTokens(user.id!, role);
+            delete user.password;
+            res.status(200).send({ user, tokens });
         }
         catch (err) {
             const error = ErrorHandler.catchError(err as Error, { ...req.body });
@@ -44,7 +46,9 @@ class UserController {
             if (!user) throw new CustomError(ErrorType.NonexistentUser, "User doesn't exist", { email })
             const isMatch = await bcrypt.compare(password, user.password!);
             if (!isMatch) throw new CustomError(ErrorType.Unauthorized, "Unauthorized");
-            res.status(200).send(user);
+            const tokens = serviceManager.authenticationService.signAuthTokens(user.id!, user.role);
+            delete user.password;
+            res.status(200).send({ user, tokens });
         }
         catch (err) {
             const error = ErrorHandler.catchError(err as Error, { ...req.body });
@@ -68,11 +72,12 @@ class UserController {
 
     public async deactivate(req: express.Request, res: express.Response) {
         try {
-            const userId = +req.params.userId;
-            if (typeof userId !== "number") throw new CustomError(ErrorType.BadRequest, "Invalid user id");
-            // check jwt owner is the same
-            await serviceManager.userService.updateUser({ id: userId, status_type: StatusType.Inactive });
-            await serviceManager.bookService.updateBook({ author_id: userId, status_type: StatusType.Inactive });
+            const userId = res.locals.jwtPayload.userId;
+            const wantedPlayerId = +req.params.userId;
+            if (typeof wantedPlayerId !== "number") throw new CustomError(ErrorType.BadRequest, "Invalid user id");
+            if (wantedPlayerId !== userId) throw new CustomError(ErrorType.Forbidden, "Forbidden");
+            await serviceManager.userService.updateUser({ id: userId, status: StatusType.Inactive });
+            await serviceManager.bookService.updateBook({ authorId: userId, status: StatusType.Inactive });
             res.status(200).send({ message: "User deactivated" });
         }
         catch (err) {

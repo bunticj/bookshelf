@@ -16,11 +16,10 @@ class BookController {
 
     public async createBook(req: express.Request, res: express.Response) {
         try {
-            // get id from jwt token
-            let id = 1;
+            const userId = res.locals.jwtPayload.userId;
             BookController.validateBookBody(req.body);
             const { title, publisher } = req.body as Book;
-            const book = await serviceManager.bookService.createBook(title, publisher, id);
+            const book = await serviceManager.bookService.createBook(title, publisher, userId);
             res.status(200).send(book);
         }
         catch (err) {
@@ -60,7 +59,7 @@ class BookController {
 
     public async deleteBook(req: express.Request, res: express.Response) {
         try {
-            const userId = 1; // extract from token
+            const userId = res.locals.jwtPayload.userId;
             const bookId = +req.params.bookId;
             if (typeof bookId !== "number") throw new CustomError(ErrorType.BadRequest, "Invalid book id");
             await serviceManager.bookService.deleteBook(bookId, userId);

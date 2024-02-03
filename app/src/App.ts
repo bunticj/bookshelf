@@ -8,6 +8,8 @@ import EnvConfig from "./businessLayer/utils/EnvConfig";
 import { LOGGER } from "./businessLayer/utils/Logger";
 import { apiRouter } from "./apiLayer/router/ApiRoutes";
 import { errorInterceptor, notFound } from "./apiLayer/middleware/ErrorMiddleware";
+import { isAdmin, isAuthor } from "./apiLayer/middleware/Authentication";
+import { adminRouter } from "./apiLayer/router/AdminRoutes";
 
 const expressApp: express.Application = express();
 
@@ -16,7 +18,8 @@ expressApp.use(express.urlencoded({ extended: true }));
 expressApp.use(express.json());
 expressApp.use(LOGGER.winstonLogger);
 expressApp.use('*', errorInterceptor);
-expressApp.use('/api', apiRouter);
+expressApp.use('/api', isAuthor, apiRouter);
+expressApp.use('/admin', isAdmin, adminRouter);
 expressApp.use(notFound);
 
 let server: http.Server | https.Server;
