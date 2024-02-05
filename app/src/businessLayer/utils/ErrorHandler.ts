@@ -1,10 +1,12 @@
 import { ErrorType } from "../enum/ErrorType";
-import { IDictionary, IErrorResponse } from "../interface/HelperInterface";
+import { IDictionary, IErrorResponseData } from "../interface/HelperInterface";
 import { CustomError } from "../model/CustomError";
+import { ErrorResponse } from "../model/ErrorResponse";
+
 import { LOGGER } from "./Logger";
 
 export class ErrorHandler {
-    public static catchError(error: Error, additionalData: IDictionary<any> = {}): IErrorResponse {
+    public static catchError(error: Error, additionalData: IDictionary<any> = {}): ErrorResponse {
         let customError = error as CustomError;
         if (additionalData.password) additionalData.password = "*";
         if (!customError.errorType) {
@@ -12,7 +14,20 @@ export class ErrorHandler {
             LOGGER.critical(`unthrownError: ${JSON.stringify(customError)} \n additionalData = ${JSON.stringify(additionalData)}`);
         }
         else LOGGER.verbose(`thrownError: ${JSON.stringify(customError)} \n additionalData = ${JSON.stringify(additionalData)}`);
-        const errorResponse: IErrorResponse = { errorType: customError.errorType, message: error.message };
-        return errorResponse;
+        const data: IErrorResponseData = { errorType: customError.errorType, message: error.message };
+        const status = this.handleErrorStatus(data.errorType);
+        return new ErrorResponse(data, status);
+    }
+
+    private static handleErrorStatus(errorType: ErrorType): number {
+        switch (errorType) {
+            case ErrorType.Unauthorized: return 401;
+            case ErrorType.Forbidden: return 403;
+            case ErrorType.NotFound: return 404;
+            case ErrorType.QueryError:
+            case ErrorType.UnknownError: return 500;
+            default: return 400;
+
+        }
     }
 }

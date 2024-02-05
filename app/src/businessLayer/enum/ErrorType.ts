@@ -10,4 +10,4 @@ export enum ErrorType {
     Unauthorized = 22,
     Forbidden = 23
 }
-    
+

@@ -1,5 +1,5 @@
 import { ErrorType } from "../../businessLayer/enum/ErrorType";
-import { IErrorResponse } from "../../businessLayer/interface/HelperInterface";
+import { IErrorResponseData } from "../../businessLayer/interface/HelperInterface";
 import { CustomError } from "../../businessLayer/model/CustomError";
 import { ErrorHandler } from "../../businessLayer/utils/ErrorHandler";
 import express from "express";
@@ -19,8 +19,8 @@ export const errorInterceptor = (error: any, req: express.Request, res: express.
     }
 }
 
-export const notFound = (res: express.Response): void => {
-    const errorResponse: IErrorResponse = { errorType: ErrorType.NotFound, message: "Resource not found" };
+export const notFound = (req: express.Request, res: express.Response): void => {
+    const errorResponse: IErrorResponseData = { errorType: ErrorType.NotFound, message: "Resource not found" };
     res.status(404).send(errorResponse);
 }
 

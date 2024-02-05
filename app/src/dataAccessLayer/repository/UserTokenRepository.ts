@@ -6,7 +6,7 @@ export class UserTokenRepository {
         this.query = new UserTokenQuery();
     }
 
-    public async createUserToken(userId: number, refreshToken: string): Promise<UserToken> {
+    public async create(userId: number, refreshToken: string): Promise<UserToken> {
         let userToken = new UserToken(userId, refreshToken);
         userToken = await this.query.createEntity(userToken);
         return userToken;
@@ -18,11 +18,16 @@ export class UserTokenRepository {
         return user;
     }
 
+    public async deleteExpiredTokens() {
+        await this.query.clearExpired();
+
+    }
+
     public async deleteTokenByUserId(userId: number): Promise<void> {
-        await this.query.deleteEntity({ userId });
+        await this.query.deleteEntity(userId);
     }
 
     public async updateToken(userId: number, refreshToken: string): Promise<void> {
-        await this.query.updateEntity({ refreshToken, userId });
+        await this.query.updateEntityById({ refreshToken, userId });
     }
 }

@@ -8,8 +8,8 @@ class DatabaseConnection {
     constructor(poolConfig: PoolConfig) {
         this.pool = createPool(poolConfig);
     }
-    
-    public async runQuery(sqlQuery: string, parameters: any[]): Promise<any> {
+
+    public async runQuery<T = any>(sqlQuery: string, parameters: any[]): Promise<T> {
         let connection: PoolConnection | undefined;
         try {
             connection = await this.pool.getConnection();
@@ -21,7 +21,6 @@ class DatabaseConnection {
             throw new CustomError(ErrorType.QueryError, (error as Error).name, { message: (error as Error).message });
         }
     }
-
 }
 
 const config: PoolConfig = {

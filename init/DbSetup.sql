@@ -12,12 +12,12 @@ USE `bookshelf`;
 
 CREATE TABLE IF NOT EXISTS `user` (
     id INT NOT NULL AUTO_INCREMENT,
-    email VARCHAR(128) NOT NULL,
+    email VARCHAR(64) NOT NULL,
     password VARCHAR(64) NOT NULL,
-    firstName VARCHAR(32) NOT NULL,
-    lastName VARCHAR(32) NOT NULL,
-    role ENUM('admin', 'author') NOT NULL,
-    status ENUM('active', 'inactive') NOT NULL,
+    firstName VARCHAR(64) NOT NULL,
+    lastName VARCHAR(64) NOT NULL,
+    role TINYINT NOT NULL,
+    status TINYINT NOT NULL,
     PRIMARY KEY (id),
     UNIQUE KEY (email)
 ) ENGINE = InnoDB;
@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS `book` (
     title VARCHAR(32) NOT NULL,
     publisher VARCHAR(32) NOT NULL,
     authorId INT NOT NULL,
-    status ENUM('active', 'inactive') NOT NULL,
+    status TINYINT NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (authorId) REFERENCES `user`(id) ON DELETE CASCADE
 ) ENGINE = InnoDB;
@@ -35,7 +35,8 @@ CREATE TABLE IF NOT EXISTS `book` (
 CREATE TABLE IF NOT EXISTS `user_token` (
     id INT NOT NULL AUTO_INCREMENT,
     userId INT NOT NULL,
-    refreshToken VARCHAR(32) NOT NULL,
+    refreshToken VARCHAR(256) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
     FOREIGN KEY (userId) REFERENCES `user`(id) ON DELETE CASCADE
 ) ENGINE = InnoDB;

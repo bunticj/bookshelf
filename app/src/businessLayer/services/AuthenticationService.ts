@@ -8,9 +8,6 @@ import { CustomError } from "../model/CustomError";
 import { ErrorType } from "../enum/ErrorType";
 
 export class AuthenticationService {
-    constructor() {
-    }
-
     public signAuthTokens(userId: number, role: RoleType): ITokenResponse {
         const accessToken = this.signToken(userId, role, TokenType.Access);
         const refreshToken = this.signToken(userId, role, TokenType.Refresh);
@@ -19,15 +16,16 @@ export class AuthenticationService {
 
     private signToken(userId: number, role: RoleType, tokenType: TokenType): string {
         const expiresIn = tokenType === TokenType.Access ? Constants.accessTokenExpirationInSeconds : Constants.refreshTokenExpirationInSeconds;
-        const payload: ITokenPayload = { userId, role, tokenType };
+        const iss = `${EnvConfig.SERVER_HOST}:${EnvConfig.SERVER_PORT}`;
+        const payload: ITokenPayload = { userId, role, tokenType, iss };
         const token = sign(payload, EnvConfig.JWT_SECRET, { expiresIn });
         return token;
     }
 
-    public verifyJwt = (token: string): ITokenPayload => {
+    public verifyJwt = (token: string, tokenType: TokenType): ITokenPayload => {
         if (!token) throw new CustomError(ErrorType.Unauthorized, ErrorType[ErrorType.Unauthorized]);
         const jwtPayload: ITokenPayload = (verify(token, EnvConfig.JWT_SECRET)) as any;
-        if (!jwtPayload || !jwtPayload.userId || jwtPayload.tokenType !== TokenType.Access) throw new CustomError(ErrorType.Unauthorized, ErrorType[ErrorType.Unauthorized]);
+        if (!jwtPayload || !jwtPayload.userId || jwtPayload.tokenType !== tokenType) throw new CustomError(ErrorType.Unauthorized, "Invalid token verification", { tokenType });
         return jwtPayload;
     }
 }

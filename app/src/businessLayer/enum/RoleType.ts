@@ -1,4 +1,4 @@
 export enum RoleType {
-    Author = "author",
-    Admin = "admin",
+    Author = 1,
+    Admin = 2,
 }

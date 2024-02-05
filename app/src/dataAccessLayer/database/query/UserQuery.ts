@@ -19,15 +19,15 @@ export class UserQuery extends AbstractQuery<User> {
         return data;
     }
 
-    public async updateEntity(data: Partial<User>): Promise<void> {
+    public async updateEntityById(data: Partial<User>): Promise<void> {
         const { email, firstName, lastName, password, role, status, id } = data;
         let query = `UPDATE ${this.table} SET email = IFNULL(?, email), firstName = IFNULL(?, firstName),lastName = IFNULL(?, lastName),
         status = IFNULL(?, status, role = IFNULL(?, role) WHERE id = ?`;
         return await DB.runQuery(query, [email, firstName, lastName, password, role, status, id]);
     }
 
-    public async deleteEntity(data: Partial<User>): Promise<void> {
-        const query = `DELETE FROM ${this.table} WHERE id = ?;`;
-        return await DB.runQuery(query, [data.id]);
+    public async changePassword(userId: number, password: string): Promise<void> {
+        let query = `UPDATE ${this.table} SET password = ? WHERE id = ?`;
+        return await DB.runQuery(query, [userId, password]);
     }
 }

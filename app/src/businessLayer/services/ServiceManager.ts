@@ -20,3 +20,7 @@ class ServiceManager {
 }
 
 export const serviceManager = new ServiceManager(); 
+(async () => {
+    await serviceManager.userService.initAdmin();
+    await serviceManager.userTokenService.clearOldTokens();
+})();

@@ -19,17 +19,18 @@ export class BookQuery extends AbstractQuery<Book> {
         return data;
     }
 
-    public async updateEntity(data: Partial<Book>): Promise<void> {
+    public async updateEntityById(data: Partial<Book>): Promise<void> {
         const { title, publisher, id, status } = data;
         let query = `UPDATE ${this.table} SET title = IFNULL(?, title), publisher = IFNULL(?, publisher),status = IFNULL(?, status)
         WHERE id = ?`;
         return await DB.runQuery(query, [title, publisher, status, id]);
     }
 
-    public async deleteEntity<T>(data: T): Promise<void> {
-        const { id, authorId } = data as Partial<Book>;
-        const query = `DELETE FROM ${this.table} WHERE id = ? AND authorId = ?;`;
-        return await DB.runQuery(query, [id, authorId]);
+    public async updateEntitiesByAuthorId(data: Partial<Book>): Promise<void> {
+        const { title, publisher, status, authorId } = data;
+        let query = `UPDATE ${this.table} SET title = IFNULL(?, title), publisher = IFNULL(?, publisher),status = IFNULL(?, status)
+        WHERE authorId = ?`;
+        return await DB.runQuery(query, [title, publisher, status, authorId!]);
     }
 }
 

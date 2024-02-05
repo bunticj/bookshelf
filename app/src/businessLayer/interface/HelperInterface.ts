@@ -6,7 +6,7 @@ export interface IDictionary<T = any> {
     [index: string | number]: T;
 }
 
-export interface IErrorResponse {
+export interface IErrorResponseData {
     errorType: ErrorType;
     message: string;
 }
@@ -15,9 +15,16 @@ export interface ITokenPayload {
     userId: number;
     role: RoleType;
     tokenType: TokenType;
+    iss: string;
 }
 
 export interface ITokenResponse {
     accessToken: string;
     refreshToken: string;
+}
+
+export interface IPaginatedData<T> {
+    page: number;
+    totalPages: number;
+    data: T[];
 }
