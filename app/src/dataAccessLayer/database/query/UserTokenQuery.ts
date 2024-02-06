@@ -12,7 +12,7 @@ export class UserTokenQuery extends AbstractQuery<UserToken> {
 
     public async createEntity(data: UserToken): Promise<UserToken> {
         const { userId, refreshToken } = data;
-        let query = `INSERT into ${this.table} (userId, refreshToken) VALUES (?, ?);`;
+        const query = `INSERT into ${this.table} (userId, refreshToken) VALUES (?, ?);`;
         const result = await DB.runQuery(query, [userId, refreshToken]);
         const id = parseInt(result.insertId);
         data.id = id;

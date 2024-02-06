@@ -5,7 +5,7 @@ export class User {
     public password?: string;
     public firstName: string;
     public lastName: string;
-    public email: string
+    public email: string;
     public role: RoleType;
     public status: StatusType;
     constructor(email: string, firstName: string, lastName: string, password: string, role?: RoleType, status?: StatusType) {

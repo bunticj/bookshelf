@@ -31,7 +31,7 @@ export abstract class AbstractQuery<ModelType> {
         const countArray: number[] = [];
 
         if (key && value) {
-            queryConditionString = `WHERE ${key} = ?`
+            queryConditionString = `WHERE ${key} = ?`;
             paramsArray.unshift(value);
             countArray.push(value);
         }

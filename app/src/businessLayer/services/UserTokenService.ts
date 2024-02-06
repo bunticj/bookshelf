@@ -25,7 +25,7 @@ export class UserTokenService {
         const userTokenData = await this.repository.getTokenByUserId(userId);
         if (!userTokenData || oldRefreshToken !== userTokenData.refreshToken) throw new CustomError(ErrorType.BadRequest, "Invalid refresh token", { oldRefreshToken, userTokenData });
         const tokens = serviceManager.authenticationService.signAuthTokens(userId, role);
-        await this.createUserToken(userId, tokens.refreshToken)
+        await this.createUserToken(userId, tokens.refreshToken);
         return tokens;
     }
 

@@ -1,6 +1,7 @@
 import { BookRepository } from "../../dataAccessLayer/repository/BookRepository";
 import { UserRepository } from "../../dataAccessLayer/repository/UserRepository";
 import { UserTokenRepository } from "../../dataAccessLayer/repository/UserTokenRepository";
+import { LOGGER } from "../utils/Logger";
 import { AuthenticationService } from "./AuthenticationService";
 import { BookService } from "./BookService";
 import { UserService } from "./UserService";
@@ -19,8 +20,8 @@ class ServiceManager {
     }
 }
 
-export const serviceManager = new ServiceManager(); 
+export const serviceManager = new ServiceManager();
 (async () => {
     await serviceManager.userService.initAdmin();
     await serviceManager.userTokenService.clearOldTokens();
-})();
+})().catch(error => LOGGER.critical(error));

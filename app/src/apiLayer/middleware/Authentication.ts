@@ -34,7 +34,7 @@ export const isAdmin = async (req: Request, res: Response, next: NextFunction) =
         const token = authorization.split("Bearer ")[1];
         LOGGER.debug("headers token : " + token);
         const jwtPayload = serviceManager.authenticationService.verifyJwt(token, TokenType.Access);
-        if (jwtPayload.role !== RoleType.Admin) throw new CustomError(ErrorType.Forbidden, "Forbidden")
+        if (jwtPayload.role !== RoleType.Admin) throw new CustomError(ErrorType.Forbidden, "Forbidden");
         res.locals.jwtPayload = jwtPayload;
         res.locals.isAdmin = true;
         return next();

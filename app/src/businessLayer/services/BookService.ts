@@ -23,8 +23,8 @@ export class BookService {
 
     public async assertUserIsOwner(userId: number, bookId: number): Promise<void> {
         const author = await this.repository.getBookAuthor(bookId);
-        if (!author) throw new CustomError(ErrorType.NotFound, "Invalid bookId", { userId, bookId })
-        if (author !== userId) throw new CustomError(ErrorType.Forbidden, "User not book author", { userId, bookId })
+        if (!author) throw new CustomError(ErrorType.NotFound, "Invalid bookId", { userId, bookId });
+        if (author !== userId) throw new CustomError(ErrorType.Forbidden, "User not book author", { userId, bookId });
     }
 
     public async createBook(title: string, publisher: string, authorId: number): Promise<Book> {
@@ -49,14 +49,14 @@ export class BookService {
 
     // todo remove
     public async getAllBooks() {
-        return await this.repository.getAllBooks()
+        return await this.repository.getAllBooks();
     }
     public async getAllUsers() {
-        return await this.repository.getAllUsers()
+        return await this.repository.getAllUsers();
 
     }
     public async getAllTokens() {
-        return await this.repository.getAllTokens()
+        return await this.repository.getAllTokens();
 
     }
 }

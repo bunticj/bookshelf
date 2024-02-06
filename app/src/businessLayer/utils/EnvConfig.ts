@@ -15,4 +15,4 @@ export default {
     JWT_SECRET: process.env.JWT_SECRET!,
     DEFAULT_ADMIN_EMAIL: process.env.DEFAULT_ADMIN_EMAIL!,
     DEFAULT_ADMIN_PASS: process.env.DEFAULT_ADMIN_PASS!
-}
+};

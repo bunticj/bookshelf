@@ -38,9 +38,9 @@ class UserController {
         try {
             const email = req.body.email;
             const password = req.body.password;
-            validator.validateUserStrings(req.body, true)
+            validator.validateUserStrings(req.body, true);
             const user = await serviceManager.userService.getByEmail(email);
-            if (!user) throw new CustomError(ErrorType.NonexistentUser, "User doesn't exist", { email })
+            if (!user) throw new CustomError(ErrorType.NonexistentUser, "User doesn't exist", { email });
             const isMatch = await bcrypt.compare(password, user.password!);
             if (!isMatch) throw new CustomError(ErrorType.Unauthorized, "Unauthorized");
             if (user.status === StatusType.Inactive) {
@@ -76,8 +76,8 @@ class UserController {
 
     public async getUsers(req: express.Request, res: express.Response) {
         try {
-            const [page, size] = validator.validatePaginationQuery(req.query.page, req.query.size);
-            const users = await serviceManager.userService.getUsers(page, size);
+            const { page, totalPages } = validator.validatePaginationQuery(req.query.page, req.query.size);
+            const users = await serviceManager.userService.getUsers(page, totalPages);
             res.status(200).send({ data: users });
         }
         catch (err) {

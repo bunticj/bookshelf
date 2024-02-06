@@ -46,7 +46,7 @@ class BookController {
             if (typeof authorId !== "number") throw new CustomError(ErrorType.BadRequest, "Invalid author");
             const [page, size] = validator.validatePaginationQuery(req.query.page, req.query.size);
             const { userId, role } = res.locals.jwtPayload as ITokenPayload;
-            if (role !== RoleType.Admin && authorId !== userId) throw new CustomError(ErrorType.Forbidden, "Can't get unowned books", { authorId, userId })
+            if (role !== RoleType.Admin && authorId !== userId) throw new CustomError(ErrorType.Forbidden, "Can't get unowned books", { authorId, userId });
             const books = await serviceManager.bookService.getBooksByAuthorId(authorId, page, size);
             res.status(200).send(books);
         }
@@ -62,7 +62,7 @@ class BookController {
             const book = req.body as Partial<Book>;
             if (typeof bookId !== "number") throw new CustomError(ErrorType.BadRequest, "Invalid bookId");
             validator.validateBookStrings(req.body, true);
-            validator.validateEnums(req.body.status as StatusType, Object.values(StatusType))
+            validator.validateEnums(req.body.status as StatusType, Object.values(StatusType));
             const { userId, role } = res.locals.jwtPayload as ITokenPayload;
             if (role !== RoleType.Admin) await serviceManager.bookService.assertUserIsOwner(userId, bookId);
             await serviceManager.bookService.updateBookByBookId(book);

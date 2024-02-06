@@ -7,7 +7,47 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "ts-node ./src/App.ts",
     "start": "node ./dist/output/App.js",
-    "compile": "tsc -b ."
+    "compile": "tsc -b .",
+    "linter": "npx eslint ."
+  },
+  "eslintConfig": {
+    "extends": [
+      "eslint:recommended",
+      "plugin:@typescript-eslint/recommended"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+      "project": "./tsconfig.json"
+    },
+    "plugins": [
+      "@typescript-eslint"
+    ],
+    "root": true,
+    "rules": {
+      "no-await-in-loop": "off",
+      "no-constant-binary-expression": "error",
+      "eqeqeq": "error",
+      "no-case-declarations": "off",
+      "no-empty": "off",
+      "no-async-promise-executor": "off",
+      "semi": "off",
+      "@typescript-eslint/semi": [
+        "error"
+      ],
+      "@typescript-eslint/no-var-requires": "off",
+      "@typescript-eslint/no-non-null-asserted-optional-chain": "off",
+      "@typescript-eslint/no-floating-promises": "error",
+      "@typescript-eslint/no-misused-promises": "error",
+      "@typescript-eslint/no-non-null-assertion": "off",
+      "@typescript-eslint/no-empty-function": "off",
+      "@typescript-eslint/no-unused-vars": "off",
+      "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/no-inferrable-types": "off"
+    },
+    "ignorePatterns": [
+      "**/*.js",
+      "**/*.d.ts"
+    ]
   },
   "repository": {
     "type": "git",
@@ -38,6 +78,9 @@
     "@types/jsonwebtoken": "^9.0.5",
     "@types/swagger-jsdoc": "^6.0.4",
     "@types/swagger-ui-express": "^4.1.6",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
+    "eslint": "^8.56.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
   }

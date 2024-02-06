@@ -1,4 +1,5 @@
 import { ErrorType } from "../../businessLayer/enum/ErrorType";
+import { IPagination } from "../../businessLayer/interface/HelperInterface";
 import { Book } from "../../businessLayer/model/Book";
 import { CustomError } from "../../businessLayer/model/CustomError";
 import { User } from "../../businessLayer/model/User";
@@ -23,7 +24,7 @@ class Validator {
         if (value && !enumValues.includes(value)) throw new CustomError(ErrorType.ValidationError, `Unexisting enum:  ${value}`, { value });
     }
 
-    public validatePaginationQuery(page: any, size: any): number[] {
+    public validatePaginationQuery(page: any, size: any): IPagination {
         let parsedPageNum = 1;
         let parsedSizeNum = 10;
         try {
@@ -38,13 +39,11 @@ class Validator {
         } catch (error) {
             ErrorHandler.catchError(error as Error, { page, size });
         }
-        finally {
-            return [parsedPageNum, parsedSizeNum];
-        }
+        return { page: parsedPageNum, totalPages: parsedSizeNum };
 
     }
 
-    private validateStrings(keys: string[], data: Object, isUpdate: boolean, maxLength?: number) {
+    private validateStrings(keys: string[], data: object, isUpdate: boolean, maxLength?: number): void {
         keys.forEach(key => {
             const value = (data as any)[key];
             if (!isUpdate && !value) return;

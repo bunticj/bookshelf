@@ -23,8 +23,11 @@ export interface ITokenResponse {
     refreshToken: string;
 }
 
-export interface IPaginatedData<T> {
+export interface IPaginatedData<T> extends IPagination {
+    data: T[];
+}
+
+export interface IPagination {
     page: number;
     totalPages: number;
-    data: T[];
 }

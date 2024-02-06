@@ -2,7 +2,7 @@ import { RoleType } from "../enum/RoleType";
 import { TokenType } from "../enum/TokenType";
 import { ITokenPayload, ITokenResponse } from "../interface/HelperInterface";
 import { Constants } from "../utils/Constants";
-import { verify, sign } from "jsonwebtoken"
+import { verify, sign } from "jsonwebtoken";
 import EnvConfig from "../../businessLayer/utils/EnvConfig";
 import { CustomError } from "../model/CustomError";
 import { ErrorType } from "../enum/ErrorType";
@@ -27,5 +27,5 @@ export class AuthenticationService {
         const jwtPayload: ITokenPayload = (verify(token, EnvConfig.JWT_SECRET)) as any;
         if (!jwtPayload || !jwtPayload.userId || jwtPayload.tokenType !== tokenType) throw new CustomError(ErrorType.Unauthorized, "Invalid token verification", { tokenType });
         return jwtPayload;
-    }
+    };
 }

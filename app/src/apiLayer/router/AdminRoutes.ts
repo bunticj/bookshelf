@@ -4,9 +4,11 @@ import { userController } from '../controller/UserController';
 
 export const adminRouter = express.Router();
 
-// User routes
+/* eslint-disable @typescript-eslint/no-misused-promises */
+
 adminRouter.patch('/user/:userId', accountController.updateUser);
 adminRouter.delete('/user/:userId', accountController.deleteUser);
 adminRouter.get('/user', userController.getUsers);
 
+/* eslint-enable @typescript-eslint/no-misused-promises */
 

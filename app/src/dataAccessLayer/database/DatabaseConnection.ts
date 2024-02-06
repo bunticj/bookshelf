@@ -14,10 +14,10 @@ class DatabaseConnection {
         try {
             connection = await this.pool.getConnection();
             const result = await connection.query(sqlQuery, parameters);
-            if (connection) connection.release();
+            if (connection) await connection.release();
             return result;
         } catch (error) {
-            if (connection) connection.release();
+            if (connection) await connection.release();
             throw new CustomError(ErrorType.QueryError, (error as Error).name, { message: (error as Error).message });
         }
     }
@@ -30,5 +30,5 @@ const config: PoolConfig = {
     database: EnvConfig.DB_NAME,
     port: EnvConfig.DB_PORT,
     connectionLimit: Constants.databaseConnectionLimit
-}
+};
 export const DB = new DatabaseConnection(config);

@@ -32,7 +32,7 @@ export class UserService {
     }
 
     public async updateUser(user: Partial<User>): Promise<void> {
-        await this.repository.updateUser(user)
+        await this.repository.updateUser(user);
     }
 
     public async deleteUser(userId: number) {

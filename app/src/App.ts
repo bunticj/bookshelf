@@ -3,7 +3,7 @@ import http from "http";
 import https from "https";
 import cors from "cors";
 import express from "express";
-import fs from "fs"
+import fs from "fs";
 import EnvConfig from "./businessLayer/utils/EnvConfig";
 import { LOGGER } from "./businessLayer/utils/Logger";
 import { errorInterceptor, notFound } from "./apiLayer/middleware/ErrorMiddleware";
