@@ -48,7 +48,7 @@ class BookController {
             const { userId, role } = res.locals.jwtPayload as ITokenPayload;
             if (role !== RoleType.Admin && authorId !== userId) throw new CustomError(ErrorType.Forbidden, "Can't get unowned books", { authorId, userId })
             const books = await serviceManager.bookService.getBooksByAuthorId(authorId, page, size);
-            res.status(200).send({ data: books });
+            res.status(200).send(books);
         }
         catch (err) {
             const error = ErrorHandler.catchError(err as Error, { url: req.originalUrl });

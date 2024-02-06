@@ -34,8 +34,8 @@ class AccountController {
             const userId = +req.params.userId;
             if (typeof userId !== "number") throw new CustomError(ErrorType.BadRequest, "Invalid user id");
             const user = await serviceManager.userService.getByUserId(userId);
-            if (user?.role === RoleType.Admin && user.status === StatusType.Active) throw new CustomError(ErrorType.Forbidden, "Invalid user id");
-
+            if (!user) throw new CustomError(ErrorType.NotFound, "Invalid user id");
+            if (user?.role === RoleType.Admin && user.status === StatusType.Active) throw new CustomError(ErrorType.Forbidden, "Only admin can delete user");
             await serviceManager.userService.deleteUser(userId);
             res.status(200).send({ data: "OK" });
         }
@@ -76,7 +76,6 @@ class AccountController {
             res.status(error.status).send({ error: error.data });
         }
     }
-
 
     public async refreshToken(req: express.Request, res: express.Response) {
         try {

@@ -23,7 +23,7 @@ export class UserRepository {
     }
 
     public async getUsers(page: number, size: number): Promise<IPaginatedData<User>> {
-        const users = await this.query.getAllData(page, size);
+        const users = await this.query.getPaginatedData(page, size);
         return users;
     }
 
@@ -41,6 +41,7 @@ export class UserRepository {
     public async updateUser(data: Partial<User>): Promise<void> {
         await this.query.updateEntityById(data);
     }
+
     public async changePassword(userId: number, pass: string): Promise<void> {
         await this.query.changePassword(userId, pass);
     }

@@ -13,6 +13,7 @@ apiRouter.post('/auth/refresh-token', accountController.refreshToken);
 apiRouter.get('/user/:userId/deactivate', accountController.deactivate);
 apiRouter.get('/user/:userId/books', bookController.getAuthorBooks);
 apiRouter.get('/user/:userId', userController.getById);
+apiRouter.post('/user/:userId/password', accountController.changePassword);
 
 // Book routes
 apiRouter.post('/book', bookController.createBook);

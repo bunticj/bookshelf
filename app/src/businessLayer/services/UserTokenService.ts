@@ -21,11 +21,11 @@ export class UserTokenService {
         await this.repository.deleteTokenByUserId(userId);
     }
 
-    public async handleRefreshToken(userId: number, refreshToken: string, role: RoleType) {
+    public async handleRefreshToken(userId: number, oldRefreshToken: string, role: RoleType) {
         const userTokenData = await this.repository.getTokenByUserId(userId);
-        if (!userTokenData || refreshToken !== userTokenData.refreshToken) throw new CustomError(ErrorType.BadRequest, "Invalid refresh token", { refreshToken, userTokenData });
+        if (!userTokenData || oldRefreshToken !== userTokenData.refreshToken) throw new CustomError(ErrorType.BadRequest, "Invalid refresh token", { oldRefreshToken, userTokenData });
         const tokens = serviceManager.authenticationService.signAuthTokens(userId, role);
-        await this.repository.updateToken(userId, tokens.refreshToken);
+        await this.createUserToken(userId, tokens.refreshToken)
         return tokens;
     }
 

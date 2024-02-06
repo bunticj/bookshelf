@@ -5,12 +5,18 @@ import { RoleType } from "../../businessLayer/enum/RoleType";
 import { ErrorHandler } from "../../businessLayer/utils/ErrorHandler";
 import { serviceManager } from "../../businessLayer/services/ServiceManager";
 import { TokenType } from "../../businessLayer/enum/TokenType";
+import { LOGGER } from "../../businessLayer/utils/Logger";
 
 export const isAuthor = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const unprotectedRoutes = ['/login', '/register'];
         if (unprotectedRoutes.includes(req.path)) return next();
-        const jwtPayload = serviceManager.authenticationService.verifyJwt(req.headers.authorization!, TokenType.Access);
+        const authorization = req.headers.authorization;
+        if (!authorization) throw new CustomError(ErrorType.Unauthorized, "Mising authorization header");
+        const token = authorization.split("Bearer ")[1];
+        LOGGER.debug("headers token : " + token);
+
+        const jwtPayload = serviceManager.authenticationService.verifyJwt(token, TokenType.Access);
         res.locals.jwtPayload = jwtPayload;
         return next();
     } catch (error) {
@@ -23,7 +29,11 @@ export const isAdmin = async (req: Request, res: Response, next: NextFunction) =
     try {
         const unprotectedRoutes = ['/login'];
         if (unprotectedRoutes.includes(req.path)) return next();
-        const jwtPayload = serviceManager.authenticationService.verifyJwt(req.headers.authorization!, TokenType.Access)
+        const authorization = req.headers.authorization;
+        if (!authorization) throw new CustomError(ErrorType.Unauthorized, "Mising authorization header");
+        const token = authorization.split("Bearer ")[1];
+        LOGGER.debug("headers token : " + token);
+        const jwtPayload = serviceManager.authenticationService.verifyJwt(token, TokenType.Access);
         if (jwtPayload.role !== RoleType.Admin) throw new CustomError(ErrorType.Forbidden, "Forbidden")
         res.locals.jwtPayload = jwtPayload;
         res.locals.isAdmin = true;

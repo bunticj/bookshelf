@@ -9,6 +9,7 @@ import { User } from '../../businessLayer/model/User';
 import { serviceManager } from '../../businessLayer/services/ServiceManager';
 import { validator } from '../validator/Validator';
 import { StatusType } from '../../businessLayer/enum/StatusType';
+import { ITokenPayload } from '../../businessLayer/interface/HelperInterface';
 
 
 class UserController {
@@ -59,8 +60,10 @@ class UserController {
 
     public async getById(req: express.Request, res: express.Response) {
         try {
-            const userId = +req.params.userId;
-            if (typeof userId !== "number") throw new CustomError(ErrorType.BadRequest, "Invalid user id");
+            const wantedUserId = +req.params.userId;
+            if (typeof wantedUserId !== "number") throw new CustomError(ErrorType.BadRequest, "Invalid user id");
+            const { role, userId } = res.locals.jwtPayload as ITokenPayload;
+            if (role !== RoleType.Admin && wantedUserId !== userId) throw new CustomError(ErrorType.Forbidden, "Can't get unowned user", { wantedUserId, userId });
             const user = await serviceManager.userService.getByUserId(userId);
             if (!user) throw new CustomError(ErrorType.NonexistentUser, "User doesn't exist", { userId });
             res.status(200).send({ data: user });
@@ -74,8 +77,8 @@ class UserController {
     public async getUsers(req: express.Request, res: express.Response) {
         try {
             const [page, size] = validator.validatePaginationQuery(req.query.page, req.query.size);
-            const books = await serviceManager.userService.getUsers(page, size);
-            res.status(200).send({ data: books });
+            const users = await serviceManager.userService.getUsers(page, size);
+            res.status(200).send({ data: users });
         }
         catch (err) {
             const error = ErrorHandler.catchError(err as Error, { url: req.originalUrl });

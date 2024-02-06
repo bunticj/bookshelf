@@ -22,7 +22,7 @@ export class BookRepository {
     }
 
     public async getBooksByAuthorId(authorId: number, page: number, size: number): Promise<IPaginatedData<Book>> {
-        const booksData = await this.query.getDataByValueId(Constants.authorIdName, authorId, page, size);
+        const booksData = await this.query.getPaginatedData(page, size, Constants.authorIdName, authorId);
         return booksData;
     }
 
@@ -43,7 +43,7 @@ export class BookRepository {
         return authorId;
     }
 
-    
+
 
 
 

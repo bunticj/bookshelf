@@ -20,14 +20,9 @@ export class UserTokenRepository {
 
     public async deleteExpiredTokens() {
         await this.query.clearExpired();
-
     }
 
     public async deleteTokenByUserId(userId: number): Promise<void> {
         await this.query.deleteEntity(userId);
-    }
-
-    public async updateToken(userId: number, refreshToken: string): Promise<void> {
-        await this.query.updateEntityById({ refreshToken, userId });
     }
 }

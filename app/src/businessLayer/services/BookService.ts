@@ -24,7 +24,7 @@ export class BookService {
     public async assertUserIsOwner(userId: number, bookId: number): Promise<void> {
         const author = await this.repository.getBookAuthor(bookId);
         if (!author) throw new CustomError(ErrorType.NotFound, "Invalid bookId", { userId, bookId })
-        if (author !== userId) throw new CustomError(ErrorType.NotFound, "User not book author", { userId, bookId })
+        if (author !== userId) throw new CustomError(ErrorType.Forbidden, "User not book author", { userId, bookId })
     }
 
     public async createBook(title: string, publisher: string, authorId: number): Promise<Book> {

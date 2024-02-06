@@ -4,7 +4,6 @@ import { IPaginatedData } from "../../../businessLayer/interface/HelperInterface
 
 export abstract class AbstractQuery<ModelType> {
     protected abstract table: string;
-
     public abstract createEntity(data: ModelType): Promise<ModelType>;
     public abstract updateEntityById(data: Partial<ModelType>): Promise<void>;
 
@@ -25,29 +24,29 @@ export abstract class AbstractQuery<ModelType> {
         return result;
     }
 
-    public async getDataByValueId(key: string, value: number | string, page: number = 1, limit = 10): Promise<IPaginatedData<ModelType>> {
-        const query = `SELECT * FROM ${this.table} WHERE ${key} = ? LIMIT ? OFFSET ?;`;
+    public async getPaginatedData(page: number = 1, limit = 10, key?: string, value?: number): Promise<IPaginatedData<ModelType>> {
         const offset = (page - 1) * limit;
-        const data = await DB.runQuery<ModelType[]>(query, [value, limit, offset]);
-        const totalCountQuery = `SELECT COUNT(*) as total FROM ${this.table} WHERE ${key} = ?;`;
-        const totalCountResult = await DB.runQuery(totalCountQuery, [value]);
+        const paramsArray = [limit, offset];
+        let queryConditionString = "";
+        const countArray: number[] = [];
+
+        if (key && value) {
+            queryConditionString = `WHERE ${key} = ?`
+            paramsArray.unshift(value);
+            countArray.push(value);
+        }
+
+        const query = `SELECT * FROM ${this.table} ${queryConditionString}; LIMIT ? OFFSET ?;`;
+        const data = await DB.runQuery<ModelType[]>(query, paramsArray);
+        const totalCountQuery = `SELECT COUNT(*) as total FROM ${this.table} ${queryConditionString};`;
+        const totalCountResult = await DB.runQuery(totalCountQuery, countArray);
+
         const totalCount = parseInt(totalCountResult[0].total);
         const totalPages = Math.ceil(totalCount / limit);
         return { data, page, totalPages };
     }
 
-    public async getAllData( page: number = 1, limit = 10): Promise<IPaginatedData<ModelType>> {
-        const query = `SELECT * FROM ${this.table} LIMIT ? OFFSET ?;`;
-        const offset = (page - 1) * limit;
-        const data = await DB.runQuery<ModelType[]>(query, [limit, offset]);
-        const totalCountQuery = `SELECT COUNT(*) as total FROM ${this.table};`;
-        const totalCountResult = await DB.runQuery(totalCountQuery, []);
-        const totalCount = parseInt(totalCountResult[0].total);
-        const totalPages = Math.ceil(totalCount / limit);
-        return { data, page, totalPages };
-    }
-
-
+    
     // TODO REMOVE LATER, JUST FOR DEBUG
     public async getAllEntities(tableName: string): Promise<any> {
         const query = `SELECT * FROM ${tableName}`;

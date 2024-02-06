@@ -24,14 +24,12 @@ export class UserTokenQuery extends AbstractQuery<UserToken> {
         await DB.runQuery(query, []);
     }
 
-    public async updateEntityById(data: Partial<UserToken>): Promise<void> {
-        const { refreshToken, userId } = data;
-        let query = `UPDATE ${this.table} SET refreshToken = ?, createdAt = CURRENT_TIMESTAMP() WHERE userId = ?`;
-        return await DB.runQuery(query, [refreshToken, userId]);
-    }
-
     public async deleteEntity(userId: number): Promise<void> {
         const query = `DELETE FROM ${this.table} WHERE userId = ?;`;
         return await DB.runQuery(query, [userId]);
+    }
+
+    public async updateEntityById(data: Partial<UserToken>): Promise<void> {
+        //  NOT IMPLEMENTED
     }
 }
