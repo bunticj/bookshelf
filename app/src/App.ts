@@ -6,11 +6,10 @@ import express from "express";
 import fs from "fs"
 import EnvConfig from "./businessLayer/utils/EnvConfig";
 import { LOGGER } from "./businessLayer/utils/Logger";
-import { apiRouter, freeRouter } from "./apiLayer/router/ApiRoutes";
 import { errorInterceptor, notFound } from "./apiLayer/middleware/ErrorMiddleware";
-import { isAdmin, isAuthor } from "./apiLayer/middleware/Authentication";
-import { adminRouter } from "./apiLayer/router/AdminRoutes";
-
+import { router } from "./apiLayer/router/Router";
+import swaggerUi from "swagger-ui-express";
+import swaggerConfig from "./docs/swagger.json";
 const expressApp: express.Application = express();
 
 expressApp.use(cors({ origin: "*" }));
@@ -18,9 +17,8 @@ expressApp.use(express.urlencoded({ extended: true }));
 expressApp.use(express.json());
 expressApp.use(LOGGER.winstonLogger);
 expressApp.use('*', errorInterceptor);
-expressApp.use('/free', freeRouter);
-expressApp.use('/api', isAuthor, apiRouter);
-expressApp.use('/admin', isAdmin, adminRouter);
+expressApp.use('/', router);
+expressApp.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerConfig));
 expressApp.use(notFound);
 
 let server: http.Server | https.Server;

@@ -20,6 +20,7 @@ class AccountController {
             if (wantedPlayerId !== userId) throw new CustomError(ErrorType.Forbidden, "Forbidden");
             await serviceManager.userService.updateUser({ id: userId, status: StatusType.Inactive });
             await serviceManager.bookService.updateBookStatusByAuthorId(userId, StatusType.Inactive);
+            await serviceManager.userTokenService.deleteUserToken(userId);
             res.status(200).send({ data: "OK" });
         }
         catch (err) {

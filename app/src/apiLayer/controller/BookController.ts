@@ -28,8 +28,10 @@ class BookController {
         try {
             const bookId = +req.params.bookId;
             if (typeof bookId !== "number") throw new CustomError(ErrorType.BadRequest, "Invalid bookId");
+            const { userId, role } = res.locals.jwtPayload as ITokenPayload;
             const book = await serviceManager.bookService.getBookById(bookId);
             if (!book) throw new CustomError(ErrorType.NotFound, "Book not found", { bookId });
+            if (role !== RoleType.Admin && book?.authorId !== userId) throw new CustomError(ErrorType.Forbidden, "Can't get unowned books", { authorId: book.authorId, userId });
             res.status(200).send({ data: book });
         }
         catch (err) {
