@@ -6,6 +6,14 @@ import { ErrorResponse } from "../model/ErrorResponse";
 import { LOGGER } from "./Logger";
 
 export class ErrorHandler {
+    /**
+     * Handles errors by creating an ErrorResponse object.
+     * If the error is not a CustomError, it constructs a CustomError object with the type ErrorType.UnknownError.
+     * Logs critical errors and verbose information about thrown errors.
+     * @param {Error} error - The error object.
+     * @param {IDictionary<any>} additionalData - Additional data to include in the error response. Default is an empty object.
+     * @returns {ErrorResponse} The ErrorResponse object representing the error.
+     */
     public static catchError(error: Error, additionalData: IDictionary<any> = {}): ErrorResponse {
         let customError = error as CustomError;
         if (additionalData.password) additionalData.password = "*";

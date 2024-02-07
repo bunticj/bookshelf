@@ -9,6 +9,14 @@ class DatabaseConnection {
         this.pool = createPool(poolConfig);
     }
 
+    /**
+     * Executes a SQL query with parameters and returns the result.
+     * @template T The type of the result.
+     * @param {string} sqlQuery - The SQL query to execute.
+     * @param {any[]} parameters - The parameters for the SQL query.
+     * @returns {Promise<T>} A promise that resolves with the result of the SQL query.
+     * @throws {CustomError} Throws a QueryError if the query execution fails.
+     */
     public async runQuery<T = any>(sqlQuery: string, parameters: any[]): Promise<T> {
         let connection: PoolConnection | undefined;
         try {

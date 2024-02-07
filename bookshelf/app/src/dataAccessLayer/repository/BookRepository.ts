@@ -43,23 +43,4 @@ export class BookRepository {
         return authorId;
     }
 
-
-
-
-
-
-    // TODO REMOVE
-    public async getAllBooks() {
-        return await this.query.getAllEntities(Constants.bookTableName);
-    }
-    public async getAllUsers() {
-        return await this.query.getAllEntities(Constants.userTableName);
-
-    }
-    public async getAllTokens() {
-        return await this.query.getAllEntities(Constants.userTokenTableName);
-    }
-
-
-
 }

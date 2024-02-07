@@ -46,12 +46,5 @@ export abstract class AbstractQuery<ModelType> {
         return { data, page, totalPages };
     }
 
-
-    // TODO REMOVE LATER, JUST FOR DEBUG
-    public async getAllEntities(tableName: string): Promise<any> {
-        const query = `SELECT * FROM ${tableName}`;
-        const results = await DB.runQuery(query, []);
-        return results;
-    }
 }
 

@@ -43,6 +43,12 @@ export class UserService {
         await this.repository.changePassword(userId, pass);
     }
 
+    /**
+    * Initializes the admin user if it doesn't already exist in the database.
+     * This method is called only on startup to ensure that there is always an admin user available.
+     * If no admin user is found in the database, it creates a default admin user using the credentials specified in the environment configuration.
+     * @returns {Promise<void>} A promise that resolves once the admin user initialization is complete.
+    */
     public async initAdmin(): Promise<void> {
         const adminId = await this.repository.getAdminId();
         if (!adminId) {
@@ -51,7 +57,7 @@ export class UserService {
             } catch (error) {
                 LOGGER.critical(`There is no admin in the database and default admin email is occupied by the regular user: ${EnvConfig.DEFAULT_ADMIN_EMAIL}. 
                 Update default admin email in .env file!`);
-               process.exit();
+                process.exit();
             }
         }
     }

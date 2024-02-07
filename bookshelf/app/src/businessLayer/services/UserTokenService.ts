@@ -21,6 +21,14 @@ export class UserTokenService {
         await this.repository.deleteTokenByUserId(userId);
     }
 
+    /**
+     * Handles the refresh token for a user.
+     * @param {number} userId - The ID of the user.
+     * @param {string} oldRefreshToken - The old refresh token.
+     * @param {RoleType} role - The role of the user.
+     * @returns {Promise<ITokenResponse>} Returns a promise resolving to an object containing new tokens.
+     * @throws {CustomError} Throws an unauthorized error if the provided refresh token is invalid.
+     */
     public async handleRefreshToken(userId: number, oldRefreshToken: string, role: RoleType): Promise<ITokenResponse> {
         const userTokenData = await this.repository.getTokenByUserId(userId);
         if (!userTokenData || oldRefreshToken !== userTokenData.refreshToken) throw new CustomError(ErrorType.Unauthorized, "Invalid refresh token", { oldRefreshToken, userTokenData });

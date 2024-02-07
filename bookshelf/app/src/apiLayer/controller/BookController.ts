@@ -9,6 +9,7 @@ import { RoleType } from '../../businessLayer/enum/RoleType';
 import { ITokenPayload } from '../../businessLayer/interface/HelperInterface';
 import { StatusType } from '../../businessLayer/enum/StatusType';
 class BookController {
+    
     public async createBook(req: express.Request, res: express.Response) {
         try {
             const userId = res.locals.jwtPayload.userId;
