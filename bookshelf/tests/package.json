@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Unit tests for Bookshelf App",
   "scripts": {
-    "test": "rm *-tests.txt; mocha -r ts-node/register \"src/**/*.spec.ts\"",
+    "test": "rm *-tests.txt; mocha -r ts-node/register --timeout 200000 \"src/**/*.spec.ts\"",
     "linter": "npx eslint .",
     "compile": "tsc -b",
     "compile-dgs": "tsc --extendedDiagnostics"

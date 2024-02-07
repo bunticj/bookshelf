@@ -4,7 +4,7 @@ import { TestHelper } from "../TestHelper.spec";
 import { UserTokenRepository } from "../../../../../app/src/dataAccessLayer/repository/UserTokenRepository";
 
 export class MockUserTokenRepository extends UserTokenRepository {
-    private userTokens: IDictionary<UserToken>; // {userId : UserToken}
+    private userTokens: IDictionary<UserToken> = {};// {userId : UserToken}
     private counter = 1;
     constructor() {
         super();

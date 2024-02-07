@@ -1,6 +1,5 @@
 import { expect } from "chai";
 import { TestHelper } from "../testUtils/TestHelper.spec";
-import { MockUserTokenRepository } from "../testUtils/mocks/MockUserTokenRepository.spec";
 import { RoleType } from "../../../../app/src/businessLayer/enum/RoleType";
 import { ErrorType } from "../../../../app/src/businessLayer/enum/ErrorType";
 import { CustomError } from "../../../../app/src/businessLayer/model/CustomError";

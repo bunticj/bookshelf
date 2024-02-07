@@ -1,7 +1,5 @@
 import { expect, use } from "chai";
 import { TestHelper } from "../testUtils/TestHelper.spec";
-import EnvConfig from "../../../../app/src/businessLayer/utils/EnvConfig";
-import { RoleType } from "../../../../app/src/businessLayer/enum/RoleType";
 import { restartRepos } from "../testUtils/mocks/MockServiceManager.spec";
 import { serviceManager } from "../../../../app/src/businessLayer/services/ServiceManager";
 import { BookService } from "../../../../app/src/businessLayer/services/BookService";

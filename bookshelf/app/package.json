@@ -4,7 +4,6 @@
   "description": "",
   "main": "./src/App.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "ts-node ./src/App.ts",
     "start": "node ./dist/output/src/App.js",
     "compile": "tsc -b .",
