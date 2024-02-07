@@ -1,0 +1,27 @@
+{
+  "name": "tests",
+  "version": "1.0.0",
+  "description": "Unit tests for Bookshelf App",
+  "scripts": {
+    "test": "rm *-tests.txt; mocha -r ts-node/register \"src/**/*.spec.ts\"",
+    "linter": "npx eslint .",
+    "compile": "tsc -b",
+    "compile-dgs": "tsc --extendedDiagnostics"
+  },
+  "eslintConfig": {
+    "parserOptions": {
+      "project": "./tsconfig.json"
+    }
+  },
+  "devDependencies": {
+    "@types/chai-as-promised": "^7.1.8",
+    "@types/mocha": "^10.0.6",
+    "@types/node": "^20.10.5",
+    "chai": "^4.3.10",
+    "chai-as-promised": "^7.1.1",
+    "dotenv": "^16.4.1",
+    "mocha": "^10.2.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  }
+}

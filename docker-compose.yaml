@@ -14,6 +14,14 @@ services:
       MARIADB_PASSWORD: ${DB_USER_PW}
       MARIADB_USER: ${DB_USER}
       MARIADB_ROOT_PASSWORD: ${DB_ROOT_PW}
+  bookshelf-api:
+    build: ./bookshelf/app
+    container_name: bookshelf-api
+    ports: 
+      - "${SERVER_PORT}:${SERVER_PORT}"
+    depends_on: 
+      - database
+    restart: on-failure      
 networks:
   default:
 volumes:
