@@ -7,4 +7,4 @@ dist/
 *.txt
 
 # Files
-.env
+#.env
