@@ -21,7 +21,7 @@ export abstract class AbstractQuery<ModelType> {
     public async getSingleColumn<ReturnType, ConditionType>(column: string, conditionKey: string, conditionValue: ConditionType): Promise<ReturnType | undefined> {
         const query = `SELECT ${column} FROM ${this.table} WHERE ${conditionKey} = ?;`;
         const [result] = await DB.runQuery(query, [conditionValue]);
-        return result;
+        return (result) ? result[column] : undefined;
     }
 
     public async getPaginatedData(page: number = 1, limit = 10, key?: string, value?: number): Promise<IPaginatedData<ModelType>> {
@@ -46,7 +46,7 @@ export abstract class AbstractQuery<ModelType> {
         return { data, page, totalPages };
     }
 
-    
+
     // TODO REMOVE LATER, JUST FOR DEBUG
     public async getAllEntities(tableName: string): Promise<any> {
         const query = `SELECT * FROM ${tableName}`;

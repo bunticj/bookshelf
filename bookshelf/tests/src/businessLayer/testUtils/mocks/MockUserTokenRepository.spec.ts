@@ -1,11 +1,18 @@
-import { IDictionary } from "../../../app/src/businessLayer/interface/HelperInterface";
-import { UserToken } from "../../../app/src/businessLayer/model/UserToken";
-import { UserTokenRepository } from "../../../app/src/dataAccessLayer/repository/UserTokenRepository"
+import { IDictionary } from "../../../../../app/src/businessLayer/interface/HelperInterface";
+import { UserToken } from "../../../../../app/src/businessLayer/model/UserToken";
+import { TestHelper } from "../TestHelper.spec";
+import { UserTokenRepository } from "../../../../../app/src/dataAccessLayer/repository/UserTokenRepository";
+
 export class MockUserTokenRepository extends UserTokenRepository {
     private userTokens: IDictionary<UserToken>; // {userId : UserToken}
-    private counter = 0;
+    private counter = 1;
     constructor() {
         super();
+        this.init();
+    }
+    private init() {
+        const userToken = TestHelper.getMockedUserToken({});
+        this.userTokens[userToken.userId] = userToken;
     }
 
     public async create(userId: number, refreshToken: string): Promise<UserToken> {

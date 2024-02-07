@@ -1,5 +1,5 @@
 import * as dotenv from "dotenv";
-dotenv.config();
+dotenv.config({path: "../../.env"});
 export default {
     SERVER_PORT: +(process.env.SERVER_PORT)!,
     SERVER_HOST: process.env.SERVER_HOST!,

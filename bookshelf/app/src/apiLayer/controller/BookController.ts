@@ -80,28 +80,13 @@ class BookController {
             if (typeof bookId !== "number") throw new CustomError(ErrorType.BadRequest, "Invalid bookId");
             const { userId, role } = res.locals.jwtPayload as ITokenPayload;
             if (role !== RoleType.Admin) await serviceManager.bookService.assertUserIsOwner(userId, bookId);
-            await serviceManager.bookService.deleteBook(bookId, userId);
+            await serviceManager.bookService.deleteBook(bookId);
             res.status(200).send({ data: "OK" });
         }
         catch (err) {
             const error = ErrorHandler.catchError(err as Error, { url: req.originalUrl });
             res.status(error.status).send({ error: error.data });
         }
-    }
-
-    // remove later
-    public async allBooksDebug(req: express.Request, res: express.Response) {
-        const data = await serviceManager.bookService.getAllBooks();
-        res.status(200).send({ data });
-    }
-    public async allUsersDebug(req: express.Request, res: express.Response) {
-        const data = await serviceManager.bookService.getAllUsers();
-        res.status(200).send({ data });
-
-    }
-    public async allTokensDebug(req: express.Request, res: express.Response) {
-        const data = await serviceManager.bookService.getAllTokens();
-        res.status(200).send({ data });
     }
 }
 

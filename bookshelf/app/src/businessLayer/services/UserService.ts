@@ -35,7 +35,7 @@ export class UserService {
         await this.repository.updateUser(user);
     }
 
-    public async deleteUser(userId: number) {
+    public async deleteUser(userId: number): Promise<void> {
         await this.repository.deleteUser(userId);
     }
 
@@ -43,14 +43,14 @@ export class UserService {
         await this.repository.changePassword(userId, pass);
     }
 
-    public async initAdmin() {
+    public async initAdmin(): Promise<void> {
         const adminId = await this.repository.getAdminId();
         if (!adminId) {
             try {
                 await this.createUser(EnvConfig.DEFAULT_ADMIN_EMAIL, EnvConfig.DEFAULT_ADMIN_PASS, "name", "lastName", RoleType.Admin, StatusType.Active);
             } catch (error) {
-                LOGGER.critical(`There is no admin in the app and default admin email is occupied in the database: ${EnvConfig.DEFAULT_ADMIN_EMAIL}. 
-                Change admin email in .env file!`);
+                LOGGER.critical(`There is no admin in the database and default admin email is occupied by the regular user: ${EnvConfig.DEFAULT_ADMIN_EMAIL}. 
+                Update default admin email in .env file!`);
                 process.exit();
             }
         }

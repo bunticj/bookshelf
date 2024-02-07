@@ -1,98 +1,129 @@
+import { expect } from "chai";
 import { UserService } from "../../../../app/src/businessLayer/services/UserService"
-import { MockUserRepository } from "../../mocks/MockUserRepository.spec";
 import { TestHelper } from "../testUtils/TestHelper.spec";
-import chai from "chai";
-const expect = chai.expect;
+import { MockUserRepository } from "../testUtils/mocks/MockUserRepository.spec";
+import EnvConfig from "../../../../app/src/businessLayer/utils/EnvConfig";
+import { RoleType } from "../../../../app/src/businessLayer/enum/RoleType";
+import { restartRepos } from "../testUtils/mocks/MockServiceManager.spec";
+import { serviceManager } from "../../../../app/src/businessLayer/services/ServiceManager";
 
-describe.only("UserService", () => {
-    let userService: UserService;
+describe("UserService", () => {
+    let userService: UserService 
     const userId = TestHelper.testUserId;
+    const email = TestHelper.testUserEmail;
+
     beforeEach(() => {
-        userService = new UserService(new MockUserRepository());
+        restartRepos();
+        userService = serviceManager.userService;
     });
 
     describe("Get By Email", () => {
         it("Should get user by email", async () => {
-            // arrange
-            const email = TestHelper.testUserEmail;
-
             // act
-            const user = await userService.getByEmail(email)
-
+            const user = await userService.getByEmail(email);
             // assert
             expect(user?.id).to.be.equal(userId);
         });
         it("Should return undefined for unexisting email", async () => {
-            const email = "Some jibberish email"
-
+            // arrange
+            const invalidEmail = "Some jibberish email"
             // act
-            const user = await userService.getByEmail(email)
-
+            const user = await userService.getByEmail(invalidEmail)
             // assert
             expect(user).to.be.undefined;
         });
     });
 
-
     describe("Get By UserId", () => {
-        it("Should get user by id", () => {
-            // arrange
+        it("Should get user by id", async () => {
             // act
+            const user = await userService.getByUserId(userId)
             // assert
+            expect(user?.email).to.be.equal(email);
         });
-        it("Should return undefined for unexisting user", () => {
-            // arrange
+        it("Should return undefined for unexisting userId", async () => {
+            const invalidUserId = 1234565;
             // act
+            const user = await userService.getByUserId(invalidUserId)
             // assert
+            expect(user).to.be.undefined;
         });
     });
 
-
-    describe("Get Users", () => {
-        it("Should get users and pagination", () => {
-            // arrange
-            // act
-            // assert
-        });
-
-    });
     describe("Create User", () => {
-        it("Should create new user", () => {
+        it("Should create new user", async () => {
             // arrange
+            const mail = "mail@gmail.com"
             // act
+            const user = await userService.createUser(mail, "pass", "name", "lastname");
             // assert
+            expect(user).to.not.be.undefined;
+            expect(user.email).to.be.equal(mail);
         });
     });
 
     describe("Update User", () => {
-        it("Should update user", () => {
+        it("Should update user", async () => {
             // arrange
+            const newName = "Updated name";
             // act
+            await userService.updateUser({ id: userId, firstName: newName });
+            const user = await userService.getByUserId(userId);
             // assert
+            expect(user?.firstName).to.be.equal(newName);
+        });
+    });
+
+    describe("Get Users", () => {
+        it("Should get users and pagination", async () => {
+            // arrange
+            await userService.createUser("meeail@gmail.com", "pass", "name", "lastname");
+            await userService.createUser("meeail2@gmail.com", "pass", "name", "lastname");
+            const pageNum = 1;
+            // act
+            const users = await userService.getUsers(pageNum, 5);
+            // assert
+            expect(users.page).to.be.equal(pageNum);
+            expect(users.data.length).to.be.equal(3);
         });
     });
 
     describe("Delete User", () => {
-        it("Should delete user", () => {
+        it("Should delete user", async () => {
             // arrange
             // act
+            await userService.deleteUser(userId);
+            const user = await userService.getByUserId(userId);
             // assert
+            expect(user).to.be.undefined;
         });
     });
 
     describe("Change Password", () => {
-        it("Should change users password", () => {
+        it("Should change users password", async () => {
             // arrange
+            const newPass = "newPass"
             // act
+            await userService.changePassword(userId, newPass);
+            const user = await userService.getByUserId(userId);
             // assert
+            expect(user?.password).to.be.equal(newPass);
         });
     });
 
-    describe("Init admin", () => {
-        it("Should get AdminId", () => {
+    describe("Init admin",  () => {
+        it("Should create Admin account if doesnt exist", async () => {
             // arrange
+            const adminEmail = EnvConfig.DEFAULT_ADMIN_EMAIL;
             // act
+            await userService.initAdmin();
+            const user = await userService.getByEmail(adminEmail);
+
             // assert
+            expect(user).to.not.be.undefined;
+            expect(user?.role).to.be.equal(RoleType.Admin);
         });
+
     });
+
 });

@@ -40,23 +40,8 @@ export class BookService {
         await this.repository.updateBooksByAuthorId({ authorId, status });
     }
 
-    public async deleteBook(bookId: number, authorId: number): Promise<void> {
+    public async deleteBook(bookId: number): Promise<void> {
         await this.repository.deleteBook(bookId);
     }
 
-
-
-
-    // todo remove
-    public async getAllBooks() {
-        return await this.repository.getAllBooks();
-    }
-    public async getAllUsers() {
-        return await this.repository.getAllUsers();
-
-    }
-    public async getAllTokens() {
-        return await this.repository.getAllTokens();
-
-    }
 }

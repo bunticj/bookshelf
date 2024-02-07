@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "ts-node ./src/App.ts",
-    "start": "node ../dist/output/App.js",
+    "start": "node ./dist/output/src/App.js",
     "compile": "tsc -b .",
     "linter": "npx eslint ."
   },
@@ -62,14 +62,14 @@
   "dependencies": {
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
-    "dotenv": "^16.4.1",
     "express": "^4.18.2",
     "express-winston": "^4.2.0",
     "jsonwebtoken": "^9.0.2",
     "mariadb": "^3.2.3",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.0",
-    "winston": "^3.11.0"
+    "winston": "^3.11.0",
+    "dotenv": "^16.4.1"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",

@@ -1,11 +1,9 @@
-
-import { RoleType } from "../../../app/src/businessLayer/enum/RoleType";
-import { StatusType } from "../../../app/src/businessLayer/enum/StatusType";
-import { IDictionary, IPaginatedData } from "../../../app/src/businessLayer/interface/HelperInterface";
-import { User } from "../../../app/src/businessLayer/model/User";
-import { UserRepository } from "../../../app/src/dataAccessLayer/repository/UserRepository"
-import { TestHelper } from "../businessLayer/testUtils/TestHelper.spec";
-
+import { RoleType } from "../../../../../app/src/businessLayer/enum/RoleType";
+import { StatusType } from "../../../../../app/src/businessLayer/enum/StatusType";
+import { IDictionary, IPaginatedData } from "../../../../../app/src/businessLayer/interface/HelperInterface";
+import { User } from "../../../../../app/src/businessLayer/model/User";
+import { UserRepository } from "../../../../../app/src/dataAccessLayer/repository/UserRepository";
+import { TestHelper } from "../TestHelper.spec";
 export class MockUserRepository extends UserRepository {
     private users: IDictionary<User> = {} //{ userId : User }
     private counter = 1;
@@ -14,7 +12,7 @@ export class MockUserRepository extends UserRepository {
         this.init();
     }
     private init() {
-        const user = TestHelper.getMockedUser();
+        const user = TestHelper.getMockedUser({});
         this.users[user.id!] = user;
     }
 
@@ -22,7 +20,7 @@ export class MockUserRepository extends UserRepository {
         const user = new User(email, firstName, lastName, password, role, status);
         this.counter++;
         user.id = this.counter;
-        this.users[user.id]
+        this.users[user.id] = user;
         return user;
     }
 

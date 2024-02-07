@@ -7,20 +7,26 @@ import { BookService } from "./BookService";
 import { UserService } from "./UserService";
 import { UserTokenService } from "./UserTokenService";
 
-class ServiceManager {
+export class ServiceManager {
     public userService: UserService;
     public bookService: BookService;
     public userTokenService: UserTokenService;
     public authenticationService: AuthenticationService;
-    constructor() {
-        this.userService = new UserService(new UserRepository());
-        this.bookService = new BookService(new BookRepository());
-        this.userTokenService = new UserTokenService(new UserTokenRepository());
-        this.authenticationService = new AuthenticationService();
+    constructor(userService: UserService, bookService: BookService,
+        userTokenService: UserTokenService, authenticationService: AuthenticationService) {
+        this.userService = userService;
+        this.bookService = bookService;
+        this.userTokenService = userTokenService;
+        this.authenticationService = authenticationService;
     }
 }
 
-export const serviceManager = new ServiceManager();
+const userService = new UserService(new UserRepository());
+const bookService = new BookService(new BookRepository());
+const authenticationService = new AuthenticationService();
+const userTokenService = new UserTokenService(new UserTokenRepository());
+
+export const serviceManager = new ServiceManager(userService, bookService, userTokenService, authenticationService);
 (async () => {
     await serviceManager.userService.initAdmin();
     await serviceManager.userTokenService.clearOldTokens();

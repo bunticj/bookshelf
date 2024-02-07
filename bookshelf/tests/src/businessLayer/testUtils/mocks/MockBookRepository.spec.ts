@@ -1,15 +1,19 @@
 import { StatusType } from "../../../../../app/src/businessLayer/enum/StatusType";
 import { IDictionary, IPaginatedData } from "../../../../../app/src/businessLayer/interface/HelperInterface";
 import { Book } from "../../../../../app/src/businessLayer/model/Book";
+import { TestHelper } from "../TestHelper.spec";
 import { BookRepository } from "../../../../../app/src/dataAccessLayer/repository/BookRepository";
-
-
 
 export class MockBookRepository extends BookRepository {
     private books: IDictionary<Book> = {}; // { bookId : Book }
-    private counter = 0;
+    private counter = 1;
     constructor() {
         super();
+        this.init();
+    }
+    private init() {
+        const book = TestHelper.getMockedBook({});
+        this.books[book.id!] = book;
     }
 
     public async create(title: string, publisher: string, authorId: number, status?: StatusType): Promise<Book> {
@@ -55,6 +59,6 @@ export class MockBookRepository extends BookRepository {
 
     public async getBookAuthor(bookId: number): Promise<number | undefined> {
         const book = this.books[bookId];
-        return book.authorId;
+        return book?.authorId;
     }
 }
