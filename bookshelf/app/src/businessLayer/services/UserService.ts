@@ -51,7 +51,7 @@ export class UserService {
             } catch (error) {
                 LOGGER.critical(`There is no admin in the database and default admin email is occupied by the regular user: ${EnvConfig.DEFAULT_ADMIN_EMAIL}. 
                 Update default admin email in .env file!`);
-                process.exit();
+               process.exit();
             }
         }
     }

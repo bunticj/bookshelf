@@ -122,7 +122,6 @@ describe("BookService", () => {
                 await bookService.assertUserIsOwner(userId, invalidBookId);
             }
             catch (error) {
-                console.log("rrorr = "+error)
                 customError = error as CustomError;
             }
             // assert

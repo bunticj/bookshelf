@@ -27,7 +27,15 @@ const authenticationService = new AuthenticationService();
 const userTokenService = new UserTokenService(new UserTokenRepository());
 
 export const serviceManager = new ServiceManager(userService, bookService, userTokenService, authenticationService);
-(async () => {
-    await serviceManager.userService.initAdmin();
-    await serviceManager.userTokenService.clearOldTokens();
-})().catch(error => LOGGER.critical(error));
+
+
+/* eslint-disable @typescript-eslint/no-misused-promises */
+setTimeout(async () => {
+    try {
+        await serviceManager.userService.initAdmin();
+        await serviceManager.userTokenService.clearOldTokens();
+    } catch (error) {
+        LOGGER.critical(`${JSON.stringify({ error, stack: (error as Error).stack })}`);
+    }
+}, 5000);
+/* eslint-enable @typescript-eslint/no-misused-promises */

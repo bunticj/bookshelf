@@ -24,11 +24,13 @@ class DatabaseConnection {
 }
 
 const config: PoolConfig = {
-    host: EnvConfig.DB_HOST,
+    host: EnvConfig.DB_HOST || "localhost",
     user: EnvConfig.DB_USER,
     password: EnvConfig.DB_USER_PASSWORD,
     database: EnvConfig.DB_NAME,
     port: EnvConfig.DB_PORT,
-    connectionLimit: Constants.databaseConnectionLimit
+    connectionLimit: Constants.databaseConnectionLimit,
+    connectTimeout: 20000
 };
+
 export const DB = new DatabaseConnection(config);
