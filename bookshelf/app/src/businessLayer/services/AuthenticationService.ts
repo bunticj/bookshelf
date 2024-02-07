@@ -3,7 +3,7 @@ import { TokenType } from "../enum/TokenType";
 import { ITokenPayload, ITokenResponse } from "../interface/HelperInterface";
 import { Constants } from "../utils/Constants";
 import { verify, sign } from "jsonwebtoken";
-import EnvConfig from "../../businessLayer/utils/EnvConfig";
+import EnvConfig from "../utils/EnvConfig";
 import { CustomError } from "../model/CustomError";
 import { ErrorType } from "../enum/ErrorType";
 

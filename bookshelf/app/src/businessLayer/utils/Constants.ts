@@ -10,6 +10,7 @@ export class Constants {
     public static readonly titleName = "title";
     public static readonly publisherName = "publisher";
     public static readonly roleName = "role";
+    public static readonly emailName = "email";
 
     // configuration
     public static readonly bcryptSaltRounds = 10;

@@ -28,7 +28,7 @@ export class UserRepository {
     }
 
     public async getByEmail(email: string): Promise<User | undefined> {
-        const user = await this.query.getEntity("email", email);
+        const user = await this.query.getEntity(Constants.emailName, email);
         if (!user) return;
         return user;
     }

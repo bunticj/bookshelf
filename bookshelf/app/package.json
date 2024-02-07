@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "ts-node ./src/App.ts",
-    "start": "node ./dist/output/App.js",
+    "start": "node ../dist/output/App.js",
     "compile": "tsc -b .",
     "linter": "npx eslint ."
   },
@@ -73,14 +73,18 @@
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
+    "@types/chai": "^4.3.11",
     "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",
     "@types/jsonwebtoken": "^9.0.5",
+    "@types/mocha": "^10.0.6",
     "@types/swagger-jsdoc": "^6.0.4",
     "@types/swagger-ui-express": "^4.1.6",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
     "@typescript-eslint/parser": "^6.21.0",
+    "chai": "^5.0.3",
     "eslint": "^8.56.0",
+    "mocha": "^10.2.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
   }
