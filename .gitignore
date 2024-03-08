@@ -3,5 +3,8 @@ data/
 node_modules/
 dist/
 
+# Extensions
+*.txt
+
 # Files
 .env

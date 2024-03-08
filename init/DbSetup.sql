@@ -6,18 +6,18 @@ START TRANSACTION;
 SET
     time_zone = "+00:00";
 
-CREATE DATABASE IF NOT EXISTS `bookshelf` DEFAULT CHARACTER SET utf8mb4;
+CREATE DATABASE IF NOT EXISTS `bookshelf` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;
 
 USE `bookshelf`;
 
 CREATE TABLE IF NOT EXISTS `user` (
     id INT NOT NULL AUTO_INCREMENT,
-    email VARCHAR(128) NOT NULL,
+    email VARCHAR(64) NOT NULL,
     password VARCHAR(64) NOT NULL,
-    first_name VARCHAR(32) NOT NULL,
-    last_name VARCHAR(32) NOT NULL,
-    role_type ENUM('admin', 'author') NOT NULL,
-    status_type ENUM('active', 'inactive') NOT NULL,
+    firstName VARCHAR(64) NOT NULL,
+    lastName VARCHAR(64) NOT NULL,
+    role TINYINT NOT NULL,
+    status TINYINT NOT NULL,
     PRIMARY KEY (id),
     UNIQUE KEY (email)
 ) ENGINE = InnoDB;
@@ -26,8 +26,17 @@ CREATE TABLE IF NOT EXISTS `book` (
     id INT NOT NULL AUTO_INCREMENT,
     title VARCHAR(32) NOT NULL,
     publisher VARCHAR(32) NOT NULL,
-    author_id INT NOT NULL,
-    status_type ENUM('active', 'inactive') NOT NULL,
+    authorId INT NOT NULL,
+    status TINYINT NOT NULL,
     PRIMARY KEY (id),
-    FOREIGN KEY (author_id) REFERENCES `user`(id)
+    FOREIGN KEY (authorId) REFERENCES `user`(id) ON DELETE CASCADE
+) ENGINE = InnoDB;
+
+CREATE TABLE IF NOT EXISTS `user_token` (
+    id INT NOT NULL AUTO_INCREMENT,
+    userId INT NOT NULL,
+    refreshToken VARCHAR(256) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    FOREIGN KEY (userId) REFERENCES `user`(id) ON DELETE CASCADE
 ) ENGINE = InnoDB;
